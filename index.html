@@ -1,0 +1,148 @@
+﻿<!doctype html>
+
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+
+<!--[if gt IE 8]><!-->
+
+<html class="">
+
+<!--<![endif]-->
+
+<head>
+
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="manifest.json">
+<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#DC3521">
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="description" content="Versão web da ferramenta Mosaico Fractal.">
+
+<meta name="keywords" content="mosaico,fractal,arte,matemática">
+
+<meta name="author" content="Giordanna De Gregoriis">
+
+<title>Mosaico Fractal Web</title>
+
+<link href="boilerplate.css" rel="stylesheet" type="text/css">
+
+<link href="portfolioResponsive.css" rel="stylesheet" type="text/css">
+
+<link href="portfolioStyle.css" rel="stylesheet" type="text/css">
+
+<link href="style.css" rel="stylesheet" type="text/css">
+
+<link href="form.css" rel="stylesheet" type="text/css">
+
+<!--[if lt IE 9]>
+
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
+<![endif]-->
+
+<script src="respond.min.js"></script>
+
+<script src="jquery-3.2.1.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="gridContainer"> 
+
+  <header class="fluid"> 
+
+    <a href="http://gior.hol.es/" title="Home">
+
+    <figure class="fluid logo textStyle"><img src="android-chrome-256x256.png" alt="logo do site" width="30px"> HOME</figure>
+
+    </a>
+
+    <h1 class="fluid mainHeading">Mosaico <b>Fractal</b></h1>
+
+    <h6 class="fluid mainTagline textStyle">Crie imagens artísticas com a versão web da ferramenta <a href="http://bitbucket.org/giordanna/mosaico-fractal" target="_blank">Mosaico Fractal</a>.</h6>
+
+  </header>
+
+  <article class="fluid">
+
+    <section class="fluid">
+    <center>
+
+        <form class="form-style-6" method="POST">
+          <p>Selecione o formato da estampa desejada para o preenchimento do espaço:</p>
+            <select id="estampa">
+              <option value="circle">Círculos</option>
+              <option value="rect">Quadrados</option>
+              <option value="triangle">Triângulos</option>
+            </select>
+
+          <p>Fundo de preenchimento atualmente escolhido:</p>
+            <select id="fundo" name="fundo" onchange="mudarFundo(this.value)">
+              <option value="bg1">Alien</option>
+              <option value="bg2">Estrela</option>
+            </select>
+          <input type="submit" value="CLIQUE PARA INICIAR" title="CLIQUE PARA INICIAR">
+        </form>
+        <div id="objeto">
+        <object type="image/svg+xml" data="bg/bg1.svg" id="main">
+          O seu navegador não tem suporte para imagens SVG.
+        </object>
+        </div>
+
+    </center>
+
+    </section>
+    
+  </article>
+
+  <footer class="fluid footer">
+
+    <section class="fluid footerSection zeroMargin_desktop zeroMargin_tablet">
+	
+		<p class="paraContent footerTextContainer">Mosaico Fractal © Giordanna De Gregoriis - 2017</p>
+	  
+    </section>
+
+  </footer> 
+
+</div>
+
+<script>
+  $(document).ready(function(){
+     var $form = $('form');
+     $form.submit(function(){
+        $.post($(this).attr('action'), $(this).serialize(), function(response){
+              // do something here on success
+        },'json');
+        return false;
+     });
+  });
+</script>
+
+<script>
+  function mudarFundo(fundo) {
+    var bg = "bg/" + fundo + ".svg";
+    var oldbg = document.getElementById("main").data;
+    if (bg != oldbg) {
+      document.getElementById("main").setAttribute('data', bg);
+      var obj = document.getElementById("objeto");
+      var conteudo = obj.innerHTML;
+      obj.innerHTML = conteudo;
+    }
+
+  }
+</script>
+
+</body>
+
+</html>
