@@ -4,6 +4,12 @@ svg {
     max-width: 600px;
 }
 
+object {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+}
+
 .enviar{
 
     box-sizing: border-box;
