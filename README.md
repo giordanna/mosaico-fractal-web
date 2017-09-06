@@ -1,6 +1,6 @@
 # Mosaico Fractal Web #
 
-O programa Mosaico Fractal tem como objetivo preencher um determinado espaço utilizando estampas que possuem uma área que respeitam uma lei de potência, na qual utiliza a função zeta de Hurwitz para este propósito, assim permitindo que estas estampas sejam inseridas no espaço ad infinitum, e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável. Esta ferramenta permite que pessoas utilizem suas próprias criações artísticas para tanto definir as formas das estampas que preencherão o espaço como o formato da tela em si.
+O programa Mosaico Fractal tem como objetivo preencher um determinado espaço utilizando estampas que possuem uma área que respeitam uma lei de potência, na qual utiliza a função zeta de Hurwitz para este propósito, assim permitindo que estas estampas sejam inseridas no espaço ad infinitum, e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável.
 
 ### Instruções ###
 * Acesse o [site do programa](http://gior.hol.es/mosaico);
