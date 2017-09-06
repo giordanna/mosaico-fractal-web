@@ -77,7 +77,7 @@
 
         <h6 class="fluid mainTagline textStyle">Crie imagens artísticas com a versão web da ferramenta Mosaico Fractal (código-fonte: <a href="https://bitbucket.org/giordanna/mosaico-fractal" target="_blank">desktop</a> | <a href="https://bitbucket.org/giordanna/mosaico-fractal-web" target="_blank">web</a>).</h6>
 
-        <p class="fluid">O programa preenche um espaço utilizando estampas e utiliza a função zeta de Hurwitz para controlar suas áreas, assim permitindo que estas estampas sejam inseridas no espaço e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável. Caso tenha interesse no estudo feito a cerca desta técnica, acesse o meu <a href="http://gior.hol.es/docs/degregoriis2017utilizacao.pdf" target="_blank"><b>TCC</b></a>.</p>
+        <p class="fluid">O programa preenche um espaço utilizando estampas e utiliza a função zeta de Hurwitz para controlar suas áreas, assim permitindo que estas estampas sejam inseridas no espaço e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável. Caso tenha interesse no estudo feito a cerca desta técnica, acesse o meu <a href="http://gior.hol.es/docs/degregoriis2017utilizacao.pdf" target="_blank"><b>Trabalho de Conclusão de Curso</b></a>.</p>
 
       </header>
 
@@ -388,18 +388,21 @@
           return interseccaoCirculo(forma, poligonoFundo);
         }
         else {
-          return interseccaoPoligono(forma, poligonoFundo);
+          if (interseccaoPoligono(forma, poligonoFundo)) return true;
+          return interseccaoPoligono(poligonoFundo, forma);
         }
       }
 
 
       function poligonoDentro(polygonTest, polygon) {
 
+        // verifica 1,2
         for (var i = 0 ; i < polygonTest.length ; i++) {
           if (!pointInPolygon(polygonTest[i], polygon)) {
             return false;
           }
         }
+
         return true;
       }
 
@@ -426,6 +429,7 @@
             }
           }
         }
+
         return false;
       }
 
