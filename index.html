@@ -59,6 +59,10 @@
 
   <script type="text/javascript" src="js/saveSvgAsPng.js"></script>
 
+  <script type="text/javascript" src="js/FileSaver.js"></script>
+
+  <script type="text/javascript" src="js/Blob.js"></script>
+
 </head>
 
   <body>
@@ -87,14 +91,14 @@
           <center>
 
             <div class="form-style-6" id="formulario">
-              <label for="selectEstampa"><p>Estampa desejada para o preenchimento do espaço:</p></label>
-              <select id="selectEstampa" name="selectEstampa" onchange="resetarFundo(selectFundo.selectedIndex)" autocomplete="off">
+              <label for="selectEstampa"><p>Estampa desejada para o preenchimento do espaço: </label>
+              <select id="selectEstampa" name="selectEstampa" onchange="resetarFundo(selectFundo.selectedIndex)">
                 <option value="estampaCirculo">Círculos</option>
                 <option value="estampaQuadrado">Quadrados</option>
                 <option value="estampaTriangulo">Triângulos</option>
-              </select>
+              </select></p>
 
-              <label for="selectFundo"><p>Fundo de preenchimento atualmente escolhido:</p></label>
+              <label for="selectFundo"><p>Fundo de preenchimento atualmente escolhido: </label>
               <select id="selectFundo" name="selectFundo" onchange="mudarFundo(this.selectedIndex)" autocomplete="off">
                 <option value="fundoQuadrado">Quadrado</option>
                 <option value="fundoCirculo">Círculo</option>
@@ -104,20 +108,20 @@
                 <option value="fundoCranio">Crânio</option>
                 <option value="fundoAlien">Alien</option>
                 <option value="fundoPikachu">Pikachu</option>
-                <option value="fundoVenusaur">Venusaur</option>
-                <option value="fundoBlastoise">Blastoise</option>
-                <option value="fundoCharizard">Charizard</option>
                 <option value="fundoFantasma">Fantasma</option>
-              </select>
+              </select></p>
 
-              <label for="numeroC"><p>Valor para a constante C:</p></label>
-              <input type="number" id="numeroC" name="numeroC" step="0.01" min="1.01" max="1.60" value="1.48" autocomplete="off" />
+              <label for="numeroQuantidade"><p>Estampas a serem inseridas (no máximo):</label>
+              <input type="number" id="numeroQuantidade" name="numeroQuantidade" step="10" min="50" max="2500" value="500" /></p>
 
-              <label for="numeroN"><p>Valor para a variável N:</p></label>
-              <input type="number" id="numeroN" name="numeroN" step="1" min="1" max="50" value="2" autocomplete="off" />
+              <label for="valorCorEstampa"><p>Cor base das estampas: </label>
+              <input type="color" id="valorCorEstampa" name="valorCorEstampa" value="#000000" /></p>
 
-              <label for="numeroQuantidade"><p>Estampas a serem inseridas (no máximo):</p></label>
-              <input type="number" id="numeroQuantidade" name="numeroQuantidade" step="10" min="50" max="2000" value="500" autocomplete="off" />
+              <label for="valorCorFundo"><p>Cor do fundo de preenchimento: </label>
+              <input type="color" id="valorCorFundo" name="valorCorFundo" value="#FFFFFF" /></p>
+
+              <label for="valorCorFundoQuadro"><p>Cor do fundo do quadro (se tiver): </label>
+              <input type="color" id="valorCorFundoQuadro" name="valorCorFundoQuadro" value="#FFFFFF" /></p>
 
               <button class="enviar" onclick="algoritmo(selectEstampa.selectedIndex, selectFundo.selectedIndex)">
                 CLIQUE PARA INICIAR
@@ -135,9 +139,6 @@
                 <object id="fundoCranio" style="display:none" data="fundos/fundoCranio.svg" type="image/svg+xml"></object>
                 <object id="fundoAlien" style="display:none" data="fundos/fundoAlien.svg" type="image/svg+xml"></object>
                 <object id="fundoPikachu" style="display:none" data="fundos/fundoPikachu.svg" type="image/svg+xml"></object>
-                <object id="fundoVenusaur" style="display:none" data="fundos/fundoVenusaur.svg" type="image/svg+xml"></object>
-                <object id="fundoBlastoise" style="display:none" data="fundos/fundoBlastoise.svg" type="image/svg+xml"></object>
-                <object id="fundoCharizard" style="display:none" data="fundos/fundoCharizard.svg" type="image/svg+xml"></object>
                 <object id="fundoFantasma" style="display:none" data="fundos/fundoFantasma.svg" type="image/svg+xml"></object>
 
               </div>
@@ -145,9 +146,16 @@
               <div id="painelPrincipal"></div>
 
               <div class="form-style-6">
-                <button id="salvar" style="display:none" class="enviar" onclick="salvar(selectFundo.selectedIndex)">
-                  SALVAR
-                </button>
+                <p>
+                  <button id="salvarPng" style="display:none" class="enviar" onclick="salvarPNG(selectFundo.selectedIndex)">
+                    SALVAR PNG
+                  </button>
+                </p>
+                <p>
+                  <button id="salvarSvg" style="display:none" class="enviar" onclick="salvarSVG(selectFundo.selectedIndex)">
+                    SALVAR SVG
+                  </button>
+                </p>
               </div>
 
             </div>
@@ -175,18 +183,31 @@
     </div>
 
     <script type="text/javascript">
-
       /* VARIÁVEIS GLOBAIS: nome das estampas, dos fundos, referência pra div das estampas e dos fundos */
       var nomeEstampas = [],
-      nomeFundos = [],
-      fundosSvg = document.getElementById("fundosSvg"),
-      estampasDados = {
-        "estampaCirculo": [0, 0 ,50],
-        "estampaQuadrado": [ [-50,-50], [-50,50], [50,50], [50,-50] ],
-        "estampaTriangulo": [ [-54.807,21.07], [41.785,46.951], [15.904,-49.641] ]
-      },
-      listaFormas = [];
-
+          nomeFundos = [],
+          fundosSvg = document.getElementById("fundosSvg"),
+          estampasDados = {
+            "estampaCirculo": [0, 0 ,50],
+            "estampaQuadrado": [ [-50,-50], [-50,50], [50,50], [50,-50] ],
+            "estampaTriangulo": [[-50,28.9], [0,-57.7], [50,28.9] ]
+          },
+          listaFormas = [],
+          
+          constanteDados = {
+            "estampaCirculo": [0.00, 0],
+            "estampaQuadrado": [-0.075, -0.5],
+            "estampaTriangulo": [0.05, 2],
+            "fundoQuadrado": [0.545, 3],
+            "fundoCirculo": [0.53, 3],
+            "fundoCoracao": [0.45, 3],
+            "fundoEstrela": [0.425, 3],
+            "fundoAnel": [0.275, 20],
+            "fundoCranio": [0.325, 5],
+            "fundoAlien": [0.4125, 3],
+            "fundoPikachu": [0.285, 5],
+            "fundoFantasma": [0.4, 3.5]
+          };
 
       // preenche o array com os nomes das estampas
       for(var i = 0; i < document.getElementById("selectEstampa").options.length; i++) {
@@ -207,7 +228,8 @@
 
         if( ! $('#painelPrincipal').is(':empty') ) {
           $('#painelPrincipal').html('');
-          document.getElementById('salvar').style.display = "none";
+          document.getElementById('salvarPng').style.display = "none";
+          document.getElementById('salvarSvg').style.display = "none";
           document.getElementById('fundosSvg').style.display = "block";
         }
 
@@ -228,16 +250,34 @@
       function resetarFundo(fundoIdx) {
         if( ! $('#painelPrincipal').is(':empty') ) {
           $('#painelPrincipal').html('');
-          document.getElementById('salvar').style.display = "none";
+          document.getElementById('salvarPng').style.display = "none";
+          document.getElementById('salvarSvg').style.display = "none";
           document.getElementById('fundosSvg').style.display = "block";
           document.getElementById(nomeFundos[fundoIdx]).style.display = 'block';
         }
       }
 
-      function salvar(fundoIdx) {
+      function salvarPNG(fundoIdx) {
 
-        saveSvgAsPng(document.getElementById("svgPrincipal"),  "mosaico_" + nomeFundos[fundoIdx] + ".png", {scale: 10, backgroundColor: "#FFFFFF", encoderOptions: 1});
+        saveSvgAsPng(document.getElementById("svgPrincipal"),  "mosaico_" + nomeFundos[fundoIdx] + ".png", {scale: 10, encoderOptions: 1});
 
+      }
+
+      function salvarSVG(fundoIdx) {
+        try {
+            var isFileSaverSupported = !!new Blob();
+        } catch (e) {
+            alert("Erro: seu navegador não dá suporte pro tipo 'Blob'.");
+        }
+
+        var html = d3.select("#painelPrincipal").select("svg")
+            .attr("title", "mosaico_" + nomeFundos[fundoIdx])
+            .attr("version", 1.1)
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+            .node().parentNode.innerHTML;
+
+        var blob = new Blob([html], {type: "image/svg+xml"});
+        saveAs(blob, "mosaico_" + nomeFundos[fundoIdx] + ".svg");
       }
 
       /* FUNÇÕES PARA ALTERAR POLÍGONO DE ESTAMPA */
@@ -403,8 +443,25 @@
           }
         }
 
+        // testa se arestas se tocam
+        var temp1 = polygon.slice(),
+            temp2 = polygonTest.slice();
+
+        temp1.push(polygon[0]);
+        temp2.push(polygonTest[0]);
+
+        for (var i = 0 ; i < temp2.length - 1; i++) {
+          for (var j = 0 ; j < temp1.length - 1; j++) {
+            if (interseccaoDuasLinhas([temp1[j], temp1[j + 1]], [temp2[i], temp2[i + 1]])) {
+              return false;
+            }
+          }
+        }
+
         return true;
       }
+
+
 
       function interseccaoPoligono(polygon1, polygon2) {
 
@@ -515,8 +572,6 @@
         rgb.push(Math.floor(Math.random() * faixa));  // green
         rgb.push(Math.floor(Math.random() * faixa));  // blue
 
-        // Console.WriteLine("{0},{1},{2}", rgb[0], rgb[1], rgb[2]);
-
         // find max and min indexes.
         var max, min;
 
@@ -573,6 +628,10 @@
 
       function algoritmo(estampaIdx, fundoIdx) {
 
+        var corDaEstampa = document.getElementById("valorCorEstampa").value;
+        var corDoFundo = document.getElementById("valorCorFundo").value;
+        var corDoFundoQuadro = document.getElementById("valorCorFundoQuadro").value;
+
         listaFormas = [];
 
         // apaga o fundo escolhido visível
@@ -602,17 +661,15 @@
         // reinicia o painel
         if( ! $('#painelPrincipal').is(':empty') ) {
           $('#painelPrincipal').html('');
-          document.getElementById('salvar').style.display = "none";
+          document.getElementById('salvarPng').style.display = "none";
+          document.getElementById('salvarSvg').style.display = "none";
         }
 
         // declara variáveis que serão utilizadas para o preenchimento
         var razaoDaArea,
-        constante,
+        constante = 1 + constanteDados[nomeFundos[fundoIdx]][0] + constanteDados[nomeEstampas[estampaIdx]][0],
         expoente,
-        N = 3;
-
-        constante = document.getElementById("numeroC").value;
-        N = document.getElementById("numeroN").value;
+        N = constanteDados[nomeFundos[fundoIdx]][1] + constanteDados[nomeEstampas[estampaIdx]][1];
 
         // calcula valores a serem utilizados nesta execução: razão e expoente
         razaoDaArea = 1.0 / funcaoZeta(constante, N);
@@ -620,7 +677,8 @@
 
         // quando terminar o preenchimento, mostrar botão de salvar
         $.when(preencherArea()).then( function (x) {
-          document.getElementById('salvar').style.display = "block";
+          document.getElementById('salvarPng').style.display = "block";
+          document.getElementById('salvarSvg').style.display = "block";
         });
 
 
@@ -645,10 +703,28 @@
           .attr("width", "600")
           .attr("height", "600");
 
-          // cor a ser usada na execução
-          var cor = corAleatoria(156);
+          painelPrincipal.append("rect")
+            .attr("x", "0")
+            .attr("y", "0")
+            .attr("width", "100")
+            .attr("height", "100")
+            .style("fill", corDoFundoQuadro);
 
-          //d3.timer(function() {
+
+          for (var i = 0 ; i < pathsFundo.length ; i++) {
+            if (pathsFundo[i].getAttribute("class") == "base") {
+              painelPrincipal.append("path")
+                .attr("d", pathsFundo[i].getAttribute("d"))
+                .style("fill", corDoFundo);
+            }
+            else {
+              painelPrincipal.append("path")
+                .attr("d", pathsFundo[i].getAttribute("d"))
+                .style("fill", corDoFundoQuadro);
+            }
+          }
+          
+
             do {
 
               // gera forma
@@ -663,24 +739,38 @@
                 // adiciona forma
                 if (nomeEstampas[estampaIdx] == "estampaCirculo") {
                   // círculo
-                  painelPrincipal.append("circle")
-                  .datum(forma)
-                  .call(positionCircle)
-                  .attr('class', "")
-                  .style("fill", cor)
-                  .style("fill-opacity", (Math.random() + .5) / 2)
-                  //.attr("r", "0")
-                  //.transition()
-                  .attr("r", function(d) { return d[2]; });
+                  var grupo = painelPrincipal.append("g");
+
+                  grupo.append("circle")
+                    .datum(forma)
+                    .call(positionCircle)
+                    .attr('class', "")
+                    .style("fill", "#FFFFFF")
+                    .attr("r", function(d) { return d[2]; });
+
+                  grupo.append("circle")
+                    .datum(forma)
+                    .call(positionCircle)
+                    .attr('class', "")
+                    .style("fill", corDaEstampa)
+                    .style("fill-opacity", (Math.random() + .5) / 2)
+                    .attr("r", function(d) { return d[2]; });
                 }
                 else {
                   // outros
-                  painelPrincipal.append("path")
-                  .datum(forma)
-                  .attr('class', "")
-                  .style("fill", cor)
-                  .style("fill-opacity", (Math.random() + .5) / 2)
-                  .call(positionPath);
+                  var grupo = painelPrincipal.append("g");
+
+                  grupo.append("path")
+                    .datum(forma)
+                    .attr('class', "")
+                    .style("fill", "#FFFFFF")
+                    .call(positionPath);
+                  grupo.append("path")
+                    .datum(forma)
+                    .attr('class', "")
+                    .style("fill", corDaEstampa)
+                    .style("fill-opacity", (Math.random() + .5) / 2)
+                    .call(positionPath);
                 }
 
                 listaFormas.push(forma);
@@ -698,8 +788,6 @@
 
             } while (numeroFormas < maxFormas && numeroIteracoes < maxIteracoes);
 
-          //});
-
           listaFormas = [];
 
           function gerarForma() {
@@ -711,7 +799,8 @@
             var forma,
             formaTransladada,
             formaValida,
-            ponto;
+            ponto,
+            dentroOuFora;
 
             forma = escalaForma(tipoEstampa, arrayEstampa, escala);
 
@@ -774,9 +863,9 @@
               // se chegou aqui, x e y são válidos
 
             return copiaForma;
+
           }
         }
-
       }
     </script>
 
