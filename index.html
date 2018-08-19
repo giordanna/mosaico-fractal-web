@@ -14,6 +14,10 @@
 
 <head>
 
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
@@ -81,7 +85,7 @@
 
         <h6 class="fluid mainTagline textStyle">Crie imagens artísticas com a versão web da ferramenta Mosaico Fractal (código-fonte: <a href="https://bitbucket.org/giordanna/mosaico-fractal" target="_blank">desktop</a> | <a href="https://bitbucket.org/giordanna/mosaico-fractal-web" target="_blank">web</a>).</h6>
 
-        <p class="fluid">O programa preenche um espaço utilizando estampas e utiliza a função zeta de Hurwitz para controlar suas áreas, assim permitindo que estas estampas sejam inseridas no espaço e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável. Caso tenha interesse no estudo feito a cerca desta técnica, acesse o meu <a href="http://gior.hol.es/docs/degregoriis2017utilizacao.pdf" target="_blank"><b>Trabalho de Conclusão de Curso</b></a>.</p>
+        <p class="fluid">O programa preenche um espaço utilizando estampas e utiliza a função zeta de Hurwitz para controlar suas áreas, assim permitindo que estas estampas sejam inseridas no espaço e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável. Caso tenha interesse no estudo feito acerca desta técnica, acesse este <a href="http://gior.hol.es/docs/degregoriis2017utilizacao.pdf" target="_blank"><b>Trabalho de Conclusão de Curso</b></a>.</p>
 
       </header>
 
@@ -96,6 +100,7 @@
                 <option value="estampaCirculo">Círculos</option>
                 <option value="estampaQuadrado">Quadrados</option>
                 <option value="estampaTriangulo">Triângulos</option>
+                <option value="estampaHilbert">Curva de Hilbert (atenção: meio lento)</option>
               </select></p>
 
               <label for="selectFundo"><p>Fundo de preenchimento atualmente escolhido: </label>
@@ -110,6 +115,13 @@
                 <option value="fundoPikachu">Pikachu</option>
                 <option value="fundoFantasma">Fantasma</option>
                 <option value="fundoDragao">Dragão</option>
+                <option value="fundoTrianguloSierpinski">Triângulo de Sierpinski</option>
+                <option value="fundoTapeteSierpinski">Tapete de Sierpinski</option>
+                <option value="fundoRosacea">Rosácea</option>
+                <option value="fundoMondrian">Mondrian</option>
+                <option value="fundoIlhaKoch">Ilha de Koch</option>
+                <option value="fundoArvorePitagorica">Árvore Pitagórica</option>
+                <option value="fundoColarApolonio">Colar de Apolônio</option>
               </select></p>
 
               <label for="numeroQuantidade"><p>Estampas a serem inseridas (no máximo):</label>
@@ -142,6 +154,13 @@
                 <object id="fundoPikachu" style="display:none" data="fundos/fundoPikachu.svg" type="image/svg+xml"></object>
                 <object id="fundoFantasma" style="display:none" data="fundos/fundoFantasma.svg" type="image/svg+xml"></object>
                 <object id="fundoDragao" style="display:none" data="fundos/fundoDragao.svg" type="image/svg+xml"></object>
+                <object id="fundoTrianguloSierpinski" style="display:none" data="fundos/fundoTrianguloSierpinski.svg" type="image/svg+xml"></object>
+                <object id="fundoTapeteSierpinski" style="display:none" data="fundos/fundoTapeteSierpinski.svg" type="image/svg+xml"></object>
+                <object id="fundoRosacea" style="display:none" data="fundos/fundoRosacea.svg" type="image/svg+xml"></object>
+                <object id="fundoMondrian" style="display:none" data="fundos/fundoMondrian.svg" type="image/svg+xml"></object>
+                <object id="fundoIlhaKoch" style="display:none" data="fundos/fundoIlhaKoch.svg" type="image/svg+xml"></object>
+                <object id="fundoArvorePitagorica" style="display:none" data="fundos/fundoArvorePitagorica.svg" type="image/svg+xml"></object>
+                <object id="fundoColarApolonio" style="display:none" data="fundos/fundoColarApolonio.svg" type="image/svg+xml"></object>
 
               </div>
 
@@ -177,7 +196,7 @@
         <script type="text/javascript">
           var d = new Date();
           var n = d.getFullYear();
-          document.getElementById("data").innerHTML = "Mosáico Fractal © Giordanna De Gregoriis - " + n;
+          document.getElementById("data").innerHTML = "Mosaico Fractal © Giordanna De Gregoriis - " + n;
         </script>
 
       </footer>
@@ -192,14 +211,16 @@
           estampasDados = {
             "estampaCirculo": [0, 0 ,50],
             "estampaQuadrado": [ [-50,-50], [-50,50], [50,50], [50,-50] ],
-            "estampaTriangulo": [[-50,28.9], [0,-57.7], [50,28.9] ]
+            "estampaTriangulo": [[-50,28.9], [0,-57.7], [50,28.9] ],
+            "estampaHilbert": [ [50,50], [4.945,50], [4.945,4.945], [32.418,4.945], [32.418,-32.417], [22.527,-32.417], [22.527,-4.945], [-22.527,-4.945], [-22.527,-32.417], [-32.417,-32.417], [-32.417,4.945], [-4.945,4.945], [-4.945,50], [-50,50], [-50,32.418], [-22.527,32.418], [-22.527,22.527], [-50,22.527], [-50,-50], [-4.945,-50], [-4.945,-22.527], [4.945,-22.527], [4.945,-50], [50,-50], [50,22.527], [22.527,22.527], [22.527,32.418], [50,32.418] ]
           },
           listaFormas = [],
-          
+
           constanteDados = {
             "estampaCirculo": [0.00, 0],
             "estampaQuadrado": [-0.075, -0.5],
             "estampaTriangulo": [0.05, 2],
+            "estampaHilbert": [-0.075, -0.5],
             "fundoQuadrado": [0.545, 3],
             "fundoCirculo": [0.53, 3],
             "fundoCoracao": [0.45, 3],
@@ -209,7 +230,14 @@
             "fundoAlien": [0.4125, 3],
             "fundoPikachu": [0.285, 5],
             "fundoFantasma": [0.4, 3.5],
-            "fundoDragao": [0.21, 20]
+            "fundoDragao": [0.21, 20],
+            "fundoTrianguloSierpinski": [0.15, 28],
+            "fundoTapeteSierpinski": [0.35, 15],
+            "fundoRosacea": [0.23, 13],
+            "fundoMondrian": [0.35, 15],
+            "fundoIlhaKoch": [0.38, 4],
+            "fundoArvorePitagorica": [0.2, 10],
+            "fundoColarApolonio": [0.3, 10]
           };
 
       // preenche o array com os nomes das estampas
@@ -674,6 +702,10 @@
         expoente,
         N = constanteDados[nomeFundos[fundoIdx]][1] + constanteDados[nomeEstampas[estampaIdx]][1];
 
+        if (nomeFundos[fundoIdx] == "fundoTrianguloSierpinski" && nomeEstampas[estampaIdx] == "estampaQuadrado") {
+          constante += 0.05;
+        }
+
         // calcula valores a serem utilizados nesta execução: razão e expoente
         razaoDaArea = 1.0 / funcaoZeta(constante, N);
         expoente = 0.5 * constante;
@@ -726,7 +758,7 @@
                 .style("fill", corDoFundoQuadro);
             }
           }
-          
+
 
             do {
 
