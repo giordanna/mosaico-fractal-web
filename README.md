@@ -3,7 +3,7 @@
 O programa Mosaico Fractal tem como objetivo preencher um determinado espaço utilizando estampas que possuem uma área que respeitam uma lei de potência, na qual utiliza a função zeta de Hurwitz para este propósito, assim permitindo que estas estampas sejam inseridas no espaço ad infinitum, e por fim apresentando um resultado que se assemelha a um fractal geométrico, sendo também esteticamente agradável.
 
 ### Instruções ###
-* Acesse o [site do programa](http://editaedi.ufpa.br/ferramentas/mosaico/);
+* Acesse o [site do programa](http://gior.hol.es/mosaico/);
 * Escolha a estampa que deseja utilizar para preencher um espaço;
 * Escolha o espaço de preenchimento (fundo);
 * Escolha a quantidade de estampas a serem inseridas;
