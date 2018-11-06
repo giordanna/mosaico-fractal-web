@@ -14,7 +14,7 @@ Caso tenha interesse na versão desktop, acesse o [repositório](https://github.
 
 Ou caso queira saber mais sobre o programa original, acesse o [TCC](http://gior.hol.es/docs/degregoriis2017utilizacao.pdf).
 
-# TODOs
+## TODOs
 * Refazer por completo a estrutura do projeto em React, pois está em vanilla JS.
 
 ## Dúvidas
