@@ -1,0 +1,155 @@
+{
+  "estampas" : [
+    {
+      "id": 0,
+      "nome": "Círculo",
+      "short": "circulo",
+      "c": 0.00,
+      "N": 0,
+      "pontos": [0, 0 ,50]
+    },
+    {
+      "id": 1,
+      "nome": "Quadrado",
+      "short": "quadrado",
+      "c": -0.075,
+      "N": -0.5,
+      "pontos": [ [-50,-50], [-50,50], [50,50], [50,-50] ]
+    },
+    {
+      "id": 2,
+      "nome": "Triângulo",
+      "short": "triangulo",
+      "c": 0.05,
+      "N": 2,
+      "pontos": [[-50,28.9], [0,-57.7], [50,28.9] ]
+    },
+    {
+      "id": 3,
+      "nome": "Curva de Hilbert",
+      "short": "hilbert",
+      "c": -0.075,
+      "N": -0.5,
+      "pontos": [[50,50], [4.945,50], [4.945,4.945], [32.418,4.945], [32.418,-32.417], [22.527,-32.417], [22.527,-4.945], [-22.527,-4.945], [-22.527,-32.417], [-32.417,-32.417], [-32.417,4.945], [-4.945,4.945], [-4.945,50], [-50,50], [-50,32.418], [-22.527,32.418], [-22.527,22.527], [-50,22.527], [-50,-50], [-4.945,-50], [-4.945,-22.527], [4.945,-22.527], [4.945,-50], [50,-50], [50,22.527], [22.527,22.527], [22.527,32.418], [50,32.418] ]
+    }
+  ],
+  "fundos": [
+    {
+      "id": 0,
+      "nome": "Quadrado",
+      "short": "quadrado",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 1,
+      "nome": "Círculo",
+      "short": "circulo",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 2,
+      "nome": "Coração",
+      "short": "coracao",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 3,
+      "nome": "Estrela",
+      "short": "estrela",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 4,
+      "nome": "Anel",
+      "short": "anel",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 5,
+      "nome": "Crânio",
+      "short": "cranio",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 6,
+      "nome": "Alien",
+      "short": "alien",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 7,
+      "nome": "Pikachu",
+      "short": "pikachu",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 8,
+      "nome": "Fantasma",
+      "short": "fantasma",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 8,
+      "nome": "Dragão",
+      "short": "dragao",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 9,
+      "nome": "Triângulo de Sierpinski",
+      "short": "triangulosierpinski",
+      "c": 0.545,
+      "N": 3
+    },{
+      "id": 10,
+      "nome": "Tapete de Sierspinski",
+      "short": "tapetesierpinski",
+      "c": 0.545,
+      "N": 3
+    },{
+      "id": 11,
+      "nome": "Flor",
+      "short": "flor",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 12,
+      "nome": "Mondrean",
+      "short": "mondrean",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 13,
+      "nome": "Ilha de Koch",
+      "short": "ilhakoch",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 14,
+      "nome": "Árvore Pitagórica",
+      "short": "arvorepitagorica",
+      "c": 0.545,
+      "N": 3
+    },
+    {
+      "id": 15,
+      "nome": "Colar de Apolônio",
+      "short": "apolonio",
+      "c": 0.545,
+      "N": 3
+    }
+  ]
+}

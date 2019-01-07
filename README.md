@@ -14,3 +14,6 @@
 * Escolha a quantidade de estampas a serem inseridas;
 * Clique para iniciar;
 * Se desejar salvar a imagem, clique em salvar (Obs: não funciona bem no Safari).
+
+## TODOs
+* Recriar as funções da antiga versão.
