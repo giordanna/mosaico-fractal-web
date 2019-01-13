@@ -111,8 +111,8 @@
 </template>
 
 <script>
-
 import * as d3 from 'd3'
+
 // import * as pointInSvgPolygon from 'point-in-svg-polygon'
 
 export default {
@@ -212,6 +212,7 @@ export default {
               'scale(0.5)' +
               'translate(50,50)'
             ))
+          this.$flatten(document.getElementById('svgPrincipal'), true)
         })
     }
   }
