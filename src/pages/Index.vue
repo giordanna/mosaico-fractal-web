@@ -112,8 +112,7 @@
 
 <script>
 import * as d3 from 'd3'
-
-// import * as pointInSvgPolygon from 'point-in-svg-polygon'
+import * as pointInSvgPolygon from 'point-in-svg-polygon'
 
 export default {
   name: 'PageIndex',
@@ -150,7 +149,7 @@ export default {
         })
         .catch(error => console.error(error))
     },
-    pathParaArray (path, samples) {
+    pathParaArray (path, samples = 100) {
       const tamanho = path.getTotalLength(),
         passo = tamanho / samples
 
@@ -189,9 +188,11 @@ export default {
       d3.xml('statics/fundos/' + this.listaFundos[this.paginaFundo - 1]['short'] + '.svg')
         .then(data => {
           pathsFundo = Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))
+          let grupoBG = painelPrincipal.append('g').attr('id', 'svgBackground')
           pathsFundo.map((path) => {
             const corDoFundo = path.getAttribute('class') === 'base' ? this.corFundo : this.corQuadro
-            painelPrincipal.append('path')
+            grupoBG.append('path')
+              .attr('class', path.getAttribute('class'))
               .attr('d', path.getAttribute('d'))
               .style('fill', corDoFundo)
           })
@@ -203,17 +204,115 @@ export default {
       d3.xml('statics/fundos/' + this.listaEstampas[this.paginaEstampa - 1]['short'] + '.svg')
         .then(data => {
           pathEstampa = Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))[0]
-          // console.log(this.pathParaArray(pathEstampa, 100))
-          painelPrincipal.append('path')
+          this.loopDeInsercao(pathEstampa, 5)
+        })
+    },
+    loopDeInsercao (pathEstampa, qtd) {
+      for (let i = 0; i < qtd; i++) {
+        let isInserido = false
+        do {
+          d3.select('#svgPrincipal').append('path')
+            .attr('id', 'svgTeste')
             .attr('d', pathEstampa.getAttribute('d'))
             .style('fill', this.corBase)
-            .attr('transform', (d) => (
-              'translate(0,0)' +
-              'scale(0.5)' +
-              'translate(50,50)'
-            ))
-          this.$flatten(document.getElementById('svgPrincipal'), true)
+            .attr('transform',
+              'translate(' + Math.random() * (100 * 0.9) + ',' + Math.random() * (100 * 0.9) + ')' +
+              'scale(0.1)'
+            )
+          this.$flatten(document.getElementById('svgTeste'), true)
+          const resultado = this.estampaEstaDentro(document.getElementById('svgTeste'),
+            document.getElementById('svgBackground'),
+            Array.prototype.slice.call(document.getElementsByClassName('svgInserido'))
+          )
+          if (!resultado) {
+            console.log('Ficou fora - removido')
+            d3.select('#svgTeste').remove()
+          } else {
+            d3.select('#svgTeste')
+              .attr('id', null)
+              .attr('class', 'svgInserido')
+            isInserido = true
+          }
+        } while (!isInserido)
+      }
+    },
+    estampaEstaDentro (estampa, fundo, estampasInseridas) {
+      const elementos = Array.prototype.slice.call(fundo.getElementsByTagName('path')),
+        pontos = this.pathParaArray(estampa, 20)
+      let passou = true
+      let pathsFundo = elementos.filter(
+        path => path.getAttribute('class') === 'ajuda'
+      ).map(path => this.pathParaArray(path, 20))
+
+      // verifica se os pontos da estampa está dentro da base e fora da ajuda
+      pontos.some((ponto) => {
+        /* debugando pontos
+        painelPrincipal.append('circle')
+          .attr('cx', ponto[0])
+          .attr('cy', ponto[1])
+          .attr('r', '1')
+          .attr('fill', 'red')
+        */
+        elementos.some((elemento) => {
+          if (!pointInSvgPolygon.isInside(ponto, elemento.getAttribute('d'))) {
+            if (elemento.getAttribute('class') === 'base') {
+              // console.log(ponto.toString() + ' - fora de base')
+              passou = false
+              return true
+            } else {
+              // console.log(ponto.toString() + ' - fora de ajuda')
+            }
+          } else {
+            if (elemento.getAttribute('class') === 'ajuda') {
+              // console.log(ponto.toString() + ' - dentro de ajuda')
+              passou = false
+              return true
+            } else {
+              // console.log(ponto.toString() + ' - dentro de base')
+            }
+          }
         })
+        return !passou
+      })
+
+      // se já foi determinado que não pode colocar a estampa no local, retorna o resultado
+      if (!passou) return false
+
+      // verifica se a estampa não está por cima de uma ajuda porém sem intersectar por ela
+      pathsFundo.some((path) => {
+        path.some((ponto) => {
+          /* debugando pontos
+          painelPrincipal.append('circle')
+            .attr('cx', ponto[0])
+            .attr('cy', ponto[1])
+            .attr('r', '1')
+            .attr('fill', 'red')
+          */
+          if (pointInSvgPolygon.isInside(ponto, estampa.getAttribute('d'))) {
+            // console.log(ponto.toString() + ' - dentro de ajuda')
+            passou = false
+            return true
+          }
+        })
+        return !passou
+      })
+
+      // se já foi determinado que não pode colocar a estampa no local, retorna o resultado
+      if (!passou) return false
+
+      // verifica se os pontos da estampa está dentro de alguma estampa
+      pontos.some((ponto) => {
+        estampasInseridas.some((estampa) => {
+          if (pointInSvgPolygon.isInside(ponto, estampa.getAttribute('d'))) {
+            passou = false
+            return true
+          }
+        })
+        return !passou
+      })
+
+      // se mesmo depois de tudo isso conseguiu passar por todos os testes, retorna o resultado (true ou false)
+      return passou
     }
   }
 }
