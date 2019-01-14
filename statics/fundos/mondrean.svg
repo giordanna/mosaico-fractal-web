@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg stroke="black" stroke-width="0.25" stroke-dasharray="2,2" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+  <path class="base" d="M0,0.8h24v9H0V0.8z"/>
+  <path class="base" d="M26,0.8h36v9H26V0.8z"/>
+  <path class="base" d="M64,0.8h30v9H64V0.8z"/>
+  <path class="base" d="M96,0.8h4v73.4h-4V0.8z"/>
+  <path class="base" d="M96,77.1h4v22.1h-4V77.1z"/>
+  <path class="base" d="M39,95.2h55v4H39V95.2z"/>
+  <path class="base" d="M13,88.2h23v11.1H13V88.2z"/>
+  <path class="base" d="M0,77.1h11v22.1H0V77.1z"/>
+  <path class="base" d="M0,37.9h11v36.2H0V37.9z"/>
+  <path class="base" d="M0,11.8h11v24.1H0V11.8z"/>
+  <path class="base" d="M13,11.8h49v50.3H13V11.8z"/>
+  <path class="base" d="M39,63.1h23v11.1H39V63.1z"/>
+  <path class="base" d="M39,77.1h23v10.1H39V77.1z"/>
+  <path class="base" d="M64,77.1h30v17.1H64V77.1z"/>
+  <path class="base" d="M64,63.1h30v11.1H64V63.1z"/>
+  <path class="base" d="M80,37.9h14v24.1H80V37.9z"/>
+  <path class="base" d="M64,11.8h30v24.1H64V11.8z"/>
+  <path class="base" d="M64,37.9h14v24.1H64V37.9z"/>
+</svg>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg stroke="black" stroke-width="0.25" stroke-dasharray="2,2" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+
+  <path class="base" d="M100,100H54.9V54.9h27.5V17.6h-9.9v27.5H27.5V17.6h-9.9v37.4h27.5V100H0V82.4h27.5v-9.9H0V0h45.1v27.5h9.9V0
+	H100v72.5H72.5v9.9H100"/>
+
+</svg>

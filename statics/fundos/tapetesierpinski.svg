@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg stroke="black" stroke-width="0.25" stroke-dasharray="2 2" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+
+<path class="base" d="M0,0v100h100V0H0z"/>
+<path class="ajuda" d="M66.7,66.6H33.3V33.4h33.3V66.6z"/>
+<path class="ajuda" d="M55.6,11.1v11.1H44.4V11.1H55.6z"/>
+<path class="ajuda" d="M11.1,11.1h11.1v11.1H11.1V11.1z"/>
+<path class="ajuda" d="M11.1,44.4h11.1v11.1H11.1V44.4z"/>
+<path class="ajuda" d="M11.1,88.9V77.7h11.1v11.1H11.1z"/>
+<path class="ajuda" d="M44.4,88.9V77.7h11.1v11.1H44.4z"/>
+<path class="ajuda" d="M88.9,88.9H77.8V77.7h11.1V88.9z"/>
+<path class="ajuda" d="M88.9,55.5H77.8V44.4h11.1V55.5z"/>
+<path class="ajuda" d="M88.9,22.3H77.8V11.1h11.1V22.3z"/>
+</svg>
