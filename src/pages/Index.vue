@@ -70,7 +70,7 @@
           icon="filter"
           label="Estampas a serem inseridas  (no máximo)"
         >
-          <q-input type="number" v-model="numeroEstampas">
+          <q-input type="number" v-model="numeroEstampas" min="10" max="1000">
 
           </q-input>
         </q-field>
@@ -124,7 +124,7 @@ export default {
       paginaFundo: 1,
       estampaPreenchimento: '',
       formaFundo: '',
-      numeroEstampas: 1000,
+      numeroEstampas: 200,
       corBase: '#000000',
       corFundo: '#ffffff',
       corQuadro: '#ffffff'
@@ -163,6 +163,44 @@ export default {
       return pontos
     },
     criarMosaico () {
+      let numeroEstampas = 0
+      const MAXITERACOES = 100,
+        MAXESTAMPAS = this.numeroEstampas
+
+      // pega a estampa
+      this.extraiEstampaEFundo().then((estampa) => {
+        // declara variáveis que serão utilizadas para o preenchimento
+        let constante = 1 + this.listaFundos[this.paginaFundo - 1]['c'] + this.listaEstampas[this.paginaEstampa - 1]['c'],
+          razaoDaArea,
+          expoente,
+          N = this.listaFundos[this.paginaFundo - 1]['N'] + this.listaEstampas[this.paginaEstampa - 1]['N'],
+          escala,
+          passou = false
+
+        // ajeita um pouco a constante
+        if (this.listaFundos[this.paginaFundo - 1]['short'] === 'triangulosierpinski' &&
+          this.listaEstampas[this.paginaEstampa - 1]['short'] === 'quadrado') {
+          constante += 0.05
+        }
+        // calcula valores a serem utilizados nesta execução: razão e expoente
+        razaoDaArea = 1.0 / this.funcaoZeta(constante, N)
+        expoente = 0.5 * constante
+
+        do {
+          if (numeroEstampas >= MAXESTAMPAS) break
+          escala = razaoDaArea * this.valorControle(N, expoente)
+
+          passou = this.tentarInserirEstampa(estampa, escala, MAXITERACOES)
+          if (passou) {
+            N++
+            numeroEstampas++
+          } else {
+            break
+          }
+        } while (numeroEstampas < MAXESTAMPAS)
+      })
+    },
+    extraiEstampaEFundo () {
       let painelPrincipal = document.getElementById('painelPrincipal')
       painelPrincipal.innerHTML = ''
       painelPrincipal = d3.select('#painelPrincipal').append('svg')
@@ -180,14 +218,10 @@ export default {
         .attr('height', '100')
         .style('fill', this.corQuadro)
 
-      let pathsFundo = null
-
-      // pointInSvgPolygon.isInside([0, 0], path.getAttribute('d'))
-
       // pega os paths do fundo
       d3.xml('statics/fundos/' + this.listaFundos[this.paginaFundo - 1]['short'] + '.svg')
         .then(data => {
-          pathsFundo = Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))
+          let pathsFundo = Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))
           let grupoBG = painelPrincipal.append('g').attr('id', 'svgBackground')
           pathsFundo.map((path) => {
             const corDoFundo = path.getAttribute('class') === 'base' ? this.corFundo : this.corQuadro
@@ -198,43 +232,43 @@ export default {
           })
         })
 
-      let pathEstampa = null
-
-      // pega o path da estampa
-      d3.xml('statics/fundos/' + this.listaEstampas[this.paginaEstampa - 1]['short'] + '.svg')
+      // envia a path da estampa
+      return d3.xml('statics/fundos/' + this.listaEstampas[this.paginaEstampa - 1]['short'] + '.svg')
         .then(data => {
-          pathEstampa = Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))[0]
-          this.loopDeInsercao(pathEstampa, 5)
+          return Array.prototype.slice.call(data.documentElement.getElementsByTagName('path'))[0]
         })
     },
-    loopDeInsercao (pathEstampa, qtd) {
-      for (let i = 0; i < qtd; i++) {
-        let isInserido = false
-        do {
-          d3.select('#svgPrincipal').append('path')
-            .attr('id', 'svgTeste')
-            .attr('d', pathEstampa.getAttribute('d'))
-            .style('fill', this.corBase)
-            .attr('transform',
-              'translate(' + Math.random() * (100 * 0.9) + ',' + Math.random() * (100 * 0.9) + ')' +
-              'scale(0.1)'
-            )
-          this.$flatten(document.getElementById('svgTeste'), true)
-          const resultado = this.estampaEstaDentro(document.getElementById('svgTeste'),
-            document.getElementById('svgBackground'),
-            Array.prototype.slice.call(document.getElementsByClassName('svgInserido'))
+    tentarInserirEstampa (pathEstampa, escala, MAXITERACOES) {
+      let iteracoes = 0,
+        isInserido = false
+      do {
+        if (iteracoes >= MAXITERACOES) break
+        d3.select('#svgPrincipal').append('path')
+          .attr('id', 'svgTeste')
+          .attr('d', pathEstampa.getAttribute('d'))
+          .style('fill', this.corBase)
+          .attr('transform',
+            'rotate(' + Math.random() * 360 + ')' +
+            'translate(' + Math.random() * (100 * (1 - escala)) + ',' + Math.random() * (100 * (1 - escala)) + ')' +
+            'scale(' + escala + ')'
           )
-          if (!resultado) {
-            console.log('Ficou fora - removido')
-            d3.select('#svgTeste').remove()
-          } else {
-            d3.select('#svgTeste')
-              .attr('id', null)
-              .attr('class', 'svgInserido')
-            isInserido = true
-          }
-        } while (!isInserido)
-      }
+        this.$flatten(document.getElementById('svgTeste'), true)
+        const resultado = this.estampaEstaDentro(document.getElementById('svgTeste'),
+          document.getElementById('svgBackground'),
+          Array.prototype.slice.call(document.getElementsByClassName('svgInserido'))
+        )
+        if (!resultado) {
+          d3.select('#svgTeste').remove()
+          iteracoes++
+        } else {
+          d3.select('#svgTeste')
+            .attr('id', null)
+            .attr('class', 'svgInserido')
+          isInserido = true
+        }
+      } while (!isInserido && iteracoes < MAXITERACOES)
+
+      return isInserido
     },
     estampaEstaDentro (estampa, fundo, estampasInseridas) {
       const elementos = Array.prototype.slice.call(fundo.getElementsByTagName('path')),
@@ -313,6 +347,17 @@ export default {
 
       // se mesmo depois de tudo isso conseguiu passar por todos os testes, retorna o resultado (true ou false)
       return passou
+    },
+    funcaoZeta (c, N) {
+      let soma = 0
+      const NMAX = 100000
+      for (let i = N; i < NMAX; i++) {
+        soma += Math.pow(i, -c)
+      }
+      return soma + (1.0 / (c - 1)) * Math.pow(NMAX, 1 - c)
+    },
+    valorControle (N, expoente) {
+      return Math.pow(N, -expoente)
     }
   }
 }
